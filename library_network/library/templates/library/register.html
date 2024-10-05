@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<h1>Register</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    
+    <div class="form-group">
+        <label for="id_username">Username:</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <span class="error-message">{{ form.username.errors }}</span>
+        {% else %}
+            <small class="form-hint">Your username must be unique.</small>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <label for="id_password1">Password:</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+            <span class="error-message">{{ form.password1.errors }}</span>
+        {% else %}
+            <small class="form-hint">Your password must contain at least 8 characters, including letters and numbers.</small>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <label for="id_password2">Confirm Password:</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+            <span class="error-message">{{ form.password2.errors }}</span>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+<p>Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+
+<script src="{% static 'js/form-validation.js' %}"></script>
+{% endblock %}

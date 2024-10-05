@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ book.title }}</h1>
+    <h5>By {{ book.author }}</h5>
+    <p><strong>Published in:</strong> {{ book.publication_year }}</p>
+    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+    <p><strong>Pages:</strong> {{ book.page_count }}</p>
+    <p><strong>Available Copies:</strong> {{ available_copies }}</p>
+
+    {% if book.cover_image %}
+    <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="img-fluid">
+    {% else %}
+    <img src="{% static 'images/default_cover.png' %}" alt="No cover image" class="img-fluid">
+    {% endif %}
+
+    <p><strong>Description:</strong></p>
+    <p>{{ book.description }}</p>
+
+    {% if is_book_available %}
+    <h3>Reserve this book</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">First Name</label>
+            <input type="text" class="form-control" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="surname">Last Name</label>
+            <input type="text" class="form-control" name="surname" required>
+        </div>
+        <div class="form-group">
+            <label for="purpose">Purpose</label>
+            <textarea class="form-control" name="purpose" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Reserve</button>
+    </form>
+    {% else %}
+    <p>All copies of this book are currently reserved.</p>
+    {% endif %}
+
+    <a href="{% url 'catalog' %}" class="btn btn-secondary">Back to Catalog</a>    
+
+    <!-- Скрытый CSRF-токен -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+</div>
+
+<script src="{% static 'js/favorites.js' %}"></script>
+{% endblock %}

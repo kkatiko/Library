@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load library_filters %}  <!-- Загрузка кастомного фильтра -->
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h1>Welcome{% if user.is_authenticated %}, {{ user.username }}!{% endif %}</h1>
+
+    {% if user.is_authenticated %}
+        <p>You are logged in.</p>
+        <p>Select your preferred library:</p>
+        <form method="post" action="{% url 'set_library' %}">
+            {% csrf_token %}
+            <select name="library">
+                {% for library in libraries %}
+                <option value="{{ library.id }}" {% if selected_library_id == library.id %}selected{% endif %}>
+                    {{ library.name }}
+                </option>
+                {% endfor %}
+            </select>
+            <button type="submit">Select Library</button>
+        </form>        
+
+        {% if selected_library_id %}
+            <p>Currently selected library: <strong>{{ libraries|get_library:selected_library_id }}</strong></p>
+            <a href="{% url 'catalog' %}">Go to Catalog</a>
+        {% endif %}
+        
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+    {% else %}
+        <p>You are not logged in.</p>
+        <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}
