@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+<div class="container">
+    <h1>{{ book.title }}</h1>
+    <h5>Автор: {{ book.author }}</h5>
+    <p><strong>Год издания:</strong> {{ book.publication_year }}</p>
+    <p><strong>Страниц:</strong> {{ book.page_count }}</p>
+    <p><strong>Цена:</strong> {{ book.price }} ₽</p>
+    <p><strong>Доступные экземпляры:</strong> {{ available_copies }}</p>
+
+    {% if book.cover_image %}
+    <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="img-fluid">
+    {% else %}
+    <img src="{% static 'images/default_cover.png' %}" alt="Обложка отсутствует" class="img-fluid">
+    {% endif %}
+
+    <p><strong>Описание:</strong></p>
+    <p>{{ book.description }}</p>
+
+    {% if missing_fields %}
+    <div class="alert alert-danger">
+        <p>Вы не можете зарезервировать эту книгу, так как ваш профиль не заполнен. Пожалуйста, заполните следующие поля:</p>
+        <ul>
+            {% for field in missing_fields %}
+            <li>{{ field|capfirst }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'profile' %}" class="btn btn-primary">Перейти к профилю</a>
+    </div>
+    {% endif %}
+
+    {% if is_book_available and not missing_fields %}
+    <h3>Зарезервировать книгу</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Зарезервировать</button>
+    </form>
+    {% elif not is_book_available %}
+    <p>Все экземпляры этой книги уже зарезервированы.</p>
+    {% endif %}
+
+    <h3 class="mt-4">Купить книгу</h3>
+    <form method="POST" action="{% url 'buy_book' book.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Купить за {{ book.price }} ₽</button>
+    </form>
+
+    <a href="{% url 'catalog' %}" class="btn btn-secondary mt-3">Вернуться в каталог</a>
+</div>
+{% endblock %}

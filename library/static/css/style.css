@@ -1,0 +1,84 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    color: #007bff;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+
+/* Стиль для полей формы */
+input[type="text"], input[type="password"], select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+input.error {
+    border-color: #dc3545; /* Красная рамка при ошибке */
+}
+
+.error-message {
+    color: #dc3545; /* Красный цвет для сообщений об ошибках */
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+/* Для подтверждения успешного ввода */
+input.success {
+    border-color: #28a745; /* Зелёная рамка при успешном вводе */
+}
+
+/* Для подсказок */
+.form-hint {
+    font-size: 0.875em;
+    color: #6c757d;
+}
+
+/* Подсказка при ошибке пароля */
+.hint-error {
+    color: #dc3545;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+.card-body {
+    text-align: center;
+}
+
+.d-none {
+    display: none;
+}
+
+.current-loans {
+    margin-top: 20px;
+    list-style-type: none;
+    padding: 0;
+}
+
+.current-loans li {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}

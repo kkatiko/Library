@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ваши избранные книги{% endblock %}
+
+{% block content %}
+<h1>Ваши избранные книги</h1>
+
+<input type="text" id="search-box" class="form-control mb-3" placeholder="Поиск книг...">
+
+{% if favorite_books %}
+<div class="row" id="favorites-container">
+    {% for favorite in favorite_books %}
+    <div class="col-md-4 favorite-item" data-title="{{ favorite.book.title|lower }}" data-author="{{ favorite.book.author|lower }}">
+        <div class="card mb-4 shadow-sm">
+            {% if favorite.book.cover_image %}
+            <img src="{{ favorite.book.cover_image.url }}" class="card-img-top" alt="{{ favorite.book.title }}">
+            {% else %}
+            <img src="{% static 'images/default_cover.png' %}" class="card-img-top" alt="Обложка отсутствует">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ favorite.book.title }}</h5>
+                <p class="card-text">{{ favorite.book.author }}</p>
+                <a href="{% url 'book_detail' favorite.book.id %}" class="btn btn-primary">Подробнее</a>
+                
+                <a href="{% url 'add_to_favorites' favorite.book.id %}" class="btn btn-danger favorite-btn" data-book-id="{{ favorite.book.id }}">
+                    Убрать из избранного
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+</div>
+{% else %}
+<p>У вас пока нет избранных книг.</p>
+{% endif %}
+
+<script src="{% static 'js/search.js' %}"></script>
+<script src="{% static 'js/favorites.js' %}"></script>
+{% endblock %}
